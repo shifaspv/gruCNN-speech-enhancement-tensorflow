@@ -1,4 +1,4 @@
-# A fully recurrent feature extraction for speech enhancement
+# A fully recurrent feature extraction for speech enhancement (Under construction)
 This is a Tensorflow implementation of the ```SE-FFTNet``` architecture suggested in <a href="https://www.isca-speech.org/archive/Interspeech_2019/pdfs/2622.pdf"> this paper</a>, where the model has a wider dilation patter at the beginning which then decreases over the layers. 
 This new dilation pattern helps to learn bettern representations of the speech and noise characteristics, and have shown better quality enhancement over the SEGAN <a href="https://arxiv.org/abs/1703.09452">[1]</a> and SE-WaveNet <a href="https://arxiv.org/abs/1706.07162">[2]</a>, while faster to train and test.<br>
 
