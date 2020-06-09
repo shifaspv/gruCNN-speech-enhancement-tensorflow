@@ -5,8 +5,7 @@ This new dilation pattern helps to learn bettern representations of the speech a
 Few samples from the trained model are displayed <a href="https://www.csd.uoc.gr/~shifaspv/IS2019-demo">here</a>, along with the other models.
 
 ## Brief description of the model architecture
-![FFTNet_noncausal](https://user-images.githubusercontent.com/33422097/83962005-bbab7b00-a8a1-11ea-9a6e-8281b0325fad.png)
-
+![gruCNN_IEEE](https://user-images.githubusercontent.com/33422097/84160014-6379a200-aa76-11ea-9943-c67dc9a974b4.jpg)
 As can be seen in the figure, the ```SE-FFTNet``` is of noncausal type that takes the noisy speech segment(<b> [x<sub>t-r</sub>, ...., x<sub>t+r</sub>] </b>) as input, with <b> r</b> is the size of receptieve filed, to generate the current sample prediction in time domain. The model doesn't have any recursion, the loss function are computed with taking the absolute difference between the predicted and target samples, refer to <a href="https://www.isca-speech.org/archive/Interspeech_2019/pdfs/2622.pdf">Eq.(2)</a> in the paper.
 
 ## Implemented On
