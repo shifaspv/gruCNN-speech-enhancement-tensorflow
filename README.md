@@ -1,6 +1,6 @@
 # gruCNN-SE: A fully recurrent feature extraction for speech enhancement
-This is a Tensorflow implementation of the ```gruCNN-SE``` architecture suggested in <a href="https://arxiv.org/submit/3217566/view"> this paper</a>, where we suggested a recurrent feature extraction approach to model speech recurrency at the feature extraction stage itself. 
-This is advantageous as the recurrency is being deemed in the extracted features, contrasting to the other models  <a href="https://www.microsoft.com/en-us/research/uploads/prod/2018/02/ZhaoZararTashevLee_ICASSP_2018.pdf">[1]</a>, <a href="https://web.cse.ohio-state.edu/~wang.77/papers/Tan-Wang1.interspeech18.pdf">[2]</a> , where the recurrency being modelled independtly from the front-end feature extraction.
+This is a Tensorflow implementation of the ```gruCNN-SE``` architecture suggested in <a href="https://arxiv.org/submit/3217566/view"> this paper</a>, where we build a recurrent feature extraction approach to model speech recurrency at the feature extraction stage itself. 
+This is advantageous as the model can capture the locall recurrency pattern of the speech, contrasting to the other models  <a href="https://www.microsoft.com/en-us/research/uploads/prod/2018/02/ZhaoZararTashevLee_ICASSP_2018.pdf">[1]</a>, <a href="https://web.cse.ohio-state.edu/~wang.77/papers/Tan-Wang1.interspeech18.pdf">[2]</a> , where the recurrency being modelled independtly from the front-end feature extraction.
 
 Few samples from the trained model are displayed <a href="https://www.csd.uoc.gr/~shifaspv/IEEE_Letter-demo">here</a>, along with the other models.
 
