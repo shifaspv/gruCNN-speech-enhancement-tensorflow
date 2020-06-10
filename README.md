@@ -15,9 +15,10 @@ Tensorflow - 1.14.0 <br>
 
 We required few more very common Python packages, check the ```required.txt``` file and install if you don't have.
 ## Data set
-The model displayed was trained on the Noisy speech database for training speech enhancement algorithms (NSDTSEA), which is publically available at <a href="https://datashare.is.ed.ac.uk/handle/10283/1942">here</a>.
+The model displayed on the paper was trained on the manually created data set with clean speech from <a href="https://datashare.is.ed.ac.uk/handle/10283/1942">here</a>. You may download the the clean and noisy speech from there, and extract them to ```./data/NSDTSEA``` directory. 
 
-Extract the data into ```./data/NSDTSEA``` directory.
+Then, generate the lists of wave files ID for training and tessting using the ```./data/generate_wave_id_list.py```.
+
 ## Description of the configuration file variables
 <table>
   <tr>
