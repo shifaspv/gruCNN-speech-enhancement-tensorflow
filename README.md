@@ -13,6 +13,7 @@ As can be seen in the figure, the ```gruCNN-SE``` is a feature domain enhancemen
 Python - 3.6.8 <br>
 Tensorflow - 1.14.0 <br>
 
+We required few more very common Python packages, check the ```required.txt``` file and install if you don't have.
 ## Data set
 The model displayed was trained on the Noisy speech database for training speech enhancement algorithms (NSDTSEA), which is publically available at <a href="https://datashare.is.ed.ac.uk/handle/10283/1942">here</a>.
 
