@@ -6,7 +6,8 @@ Few samples from the trained model are displayed <a href="https://www.csd.uoc.gr
 
 ## Brief description of the model architecture
 ![1 1](https://user-images.githubusercontent.com/33422097/84161101-9708fc00-aa77-11ea-9b55-573f05b6bd81.jpg)
-As can be seen in the figure, the ```SE-FFTNet``` is of noncausal type that takes the noisy speech segment(<b> [x<sub>t-r</sub>, ...., x<sub>t+r</sub>] </b>) as input, with <b> r</b> is the size of receptieve filed, to generate the current sample prediction in time domain. The model doesn't have any recursion, the loss function are computed with taking the absolute difference between the predicted and target samples, refer to <a href="https://www.isca-speech.org/archive/Interspeech_2019/pdfs/2622.pdf">Eq.(2)</a> in the paper.
+<br>
+As can be seen in the figure, the ```gruCNN-SE``` is a feature domain enhancement model that takes the noisy spectra as ther input and extracts features recurrenctly over time. To better understand the exact layer wise details please refer to our paper <a href="https://arxiv.org/submit/3217566/view">at here</a> .
 
 ## Implemented On
 Python - 3.6.8 <br>
