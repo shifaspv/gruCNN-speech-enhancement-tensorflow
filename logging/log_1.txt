@@ -1,0 +1,159 @@
+Training of FFTNet started at: 2019-12-13, 12-47-04 using Tensorflow.
+
+Configuration file: ../config/config_params.json
+{
+    "data_dir"                 : "../data/NSDTSEA/",
+    "train_file_list"          : "train_id_list.txt",
+    "valid_file_list"          : "valid_id_list.txt", 
+    "use_dropout"              : false,  
+    "train_clean_audio_dir"    : "clean_trainset_wav",
+    "train_noisy_audio_dir"    : "noisy_trainset_wav",   
+    "valid_clean_audio_dir"    : "clean_testset_wav",
+    "valid_noisy_audio_dir"    : "noisy_testset_wav",
+    "test_clean_audio_dir"     : "clean_testset_wav",
+    "test_noisy_audio_dir"     : "noisy_testset_wav/2.5",  
+    "audio_ext"                : ".wav",
+    "sample_rate"              : 16000,   
+     
+    "queue_size"               : 128,
+    "permute_segments"         : true,
+    "base_dir"                 : "..",
+    "output_dir"               : "output/2.5",
+    "saved_models_dir"         : "saved_models",
+    "logging_dir"              : "logging",
+    "model_ids"                : "model_ids.txt",
+
+    "num_lstm_layers"          :[1,2,3,4,5,6],          
+    "masker_length"            :160,
+    "num_input_frames"         :128,
+    "frame_size"               : 0.020,
+    "frame_shift"              : 0.010,
+    "filter_size_conv_lstm"    :[3,3], 
+    "num_channel_lstm"           : 128,
+    "num_unit_fc"           : 256,
+    
+    "use_biases"               : {"causal_layer":true, "bias":false, "bias_block":false, "TD_layer":false
+                                },
+    "zero_pad_percentage"      : 0.25,
+    "regain"                   : 0.06,
+    "extract_voice"            : true, 
+    "remove_silence"           : true, 
+    "silence_threshold"        : 0.09,
+
+    "L2_regularization"        : 0, 
+
+    "loss"                     : { "out_1": { "l1": 0, "l2": 1, "weight": 1 }
+                                   },
+    "n_early_stop_epochs"      : 9,
+    "n_epochs"                 : 100,       
+    "batch_size"               : 10,
+    "learning_rate_method"     : "exponential",
+    "optimization_algorithm"   : "adam", 
+    "optimization_parameters"  : "optim_wavenet.json",
+    "use_ema"                  : false,
+    "polyak_decay"             : 0.9995,
+
+    "CUDA_VISIBLE_DEVICES"     : "1"
+}
+
+Optimization parameters file: ../config/optim_wavenet.json
+adam
+{
+    "learning_rate_method":{
+        "constant"          : {"learning_rate":0.001},
+        "exponential"       : {"learning_rate":0.001, "decay_steps":20000, "decay_rate":0.99, "staircase":false},
+        "natural_exp"       : {"learning_rate":0.001, "decay_steps":100000, "decay_rate":0.99, "staircase":false},
+        "inverse_time"      : {"learning_rate":0.001, "decay_steps":100000, "decay_rate":0.99, "staircase":false},
+        "piecewise_constant": {"boundaries":[5000, 10000, 20000], "values":[0.002, 0.001, 0.0005, 0.0001]},
+        "polynomial"        : {"learning_rate":0.001, "decay_steps":100000, "end_learning_rate":0.0001, "power":1.0, "cycle":false} 
+    },
+
+    "optimization_algorithm":{
+        "sgd"     : {}, 
+        "momentum": {"momentum":0.9, "use_nesterov":true}, 
+        "adadelta": {"rho":0.95, "epsilon":1e-08},
+        "adagrad" : {"initial_accumulator_value":0.1},
+        "rmsprop" : {"decay":0.9, "momentum":0.3, "epsilon":1e-10, "centered":true},
+        "adam"    : {"beta1":0.9, "beta2":0.999, "epsilon":1e-08} 
+    }
+}
+
+
+Epoch=1, Train: 17.764083118665788, Valid: 10.425875091552735, Time=1593.4645628929138
+Best epoch=1
+Epoch=2, Train: 10.378514511244637, Valid: 8.746557998657227, Time=1288.8266377449036
+Best epoch=2
+Epoch=3, Train: 8.816275669468773, Valid: 7.462945754711445, Time=1285.8249435424805
+Best epoch=3
+Epoch=4, Train: 7.3108158944145085, Valid: 6.453460612663856, Time=1286.6846244335175
+Best epoch=4
+Epoch=5, Train: 6.51503196405986, Valid: 5.889517351297232, Time=1286.5832560062408
+Best epoch=5
+Epoch=6, Train: 5.626248335081433, Valid: 4.673006938054011, Time=1286.5062336921692
+Best epoch=6
+Epoch=7, Train: 4.531416276144603, Valid: 4.127275620974027, Time=1286.8573083877563
+Best epoch=7
+Epoch=8, Train: 4.049957935299192, Valid: 3.7556737202864428, Time=1286.8755342960358
+Best epoch=8
+Epoch=9, Train: 3.8861423447018577, Valid: 3.7370793122511645, Time=1285.0427191257477
+Best epoch=9
+Epoch=10, Train: 3.7632118056690884, Valid: 3.873230479313777, Time=1285.4651470184326
+Epoch=11, Train: 3.725896563321825, Valid: 3.6236325887533334, Time=1286.3820674419403
+Best epoch=11
+Epoch=12, Train: 3.588683032327228, Valid: 3.5974113427675687, Time=1285.4042098522186
+Best epoch=12
+Epoch=13, Train: 3.5093259754635038, Valid: 3.5208503007888794, Time=1287.023426771164
+Best epoch=13
+Epoch=14, Train: 3.4625308511276094, Valid: 3.5790513515472413, Time=1286.9325029850006
+Epoch=15, Train: 3.4008573393026986, Valid: 3.4947028783651497, Time=1286.8680226802826
+Best epoch=15
+Epoch=16, Train: 3.3846803326455372, Valid: 3.3428132405647863, Time=1286.0193960666656
+Best epoch=16
+Epoch=17, Train: 3.328854497936037, Valid: 3.3660013052133415, Time=1286.3471641540527
+Epoch=18, Train: 3.1923629499617077, Valid: 3.3521619760073147, Time=1286.7973537445068
+Epoch=19, Train: 3.1719100768603976, Valid: 3.226099733205942, Time=1286.429824590683
+Best epoch=19
+Epoch=20, Train: 3.1533055797455805, Valid: 3.3089935577832734, Time=1285.8200018405914
+Epoch=21, Train: 3.1158221096746503, Valid: 3.24746371782743, Time=1286.7820599079132
+Epoch=22, Train: 3.103431996372011, Valid: 3.464625044969412, Time=1286.3825323581696
+Epoch=23, Train: 3.0891739371277036, Valid: 3.261240713412945, Time=1286.7867057323456
+Epoch=24, Train: 3.0553059821564053, Valid: 3.2905096072417037, Time=1286.5402565002441
+Epoch=25, Train: 3.0277645833908564, Valid: 3.4579147705665, Time=1285.5769739151
+Epoch=26, Train: 3.0217289496508855, Valid: 3.2687925852262056, Time=1286.7893702983856
+Epoch=27, Train: 2.999215311237744, Valid: 3.2116556552740243, Time=1286.1592712402344
+Best epoch=27
+Epoch=28, Train: 3.003296946722364, Valid: 3.986643589459933, Time=1285.9914820194244
+Epoch=29, Train: 2.96873400253909, Valid: 3.3106247333379892, Time=1286.7758498191833
+Epoch=30, Train: 2.9543684914944666, Valid: 3.2942538463152373, Time=1286.7983264923096
+Epoch=31, Train: 2.917317981994341, Valid: 3.2086953126467193, Time=1288.1329843997955
+Best epoch=31
+Epoch=32, Train: 2.895665473171643, Valid: 3.2040566279337956, Time=1286.5670602321625
+Best epoch=32
+Epoch=33, Train: 2.8840095897515616, Valid: 3.136957893004784, Time=1286.8498170375824
+Best epoch=33
+Epoch=34, Train: 2.883931932468263, Valid: 3.2725444646982047, Time=1287.8263490200043
+Epoch=35, Train: 2.8821814992125074, Valid: 3.1937899827957152, Time=1288.3666896820068
+Epoch=36, Train: 2.8497122379522475, Valid: 3.273325850413396, Time=1288.4686913490295
+Epoch=37, Train: 2.7665274708517016, Valid: 3.2154295187730058, Time=1288.3440036773682
+Epoch=38, Train: 2.726363523611947, Valid: 3.1412495099581204, Time=1286.9828782081604
+Epoch=39, Train: 2.7176895974174378, Valid: 3.2276320237379807, Time=1287.3206627368927
+Epoch=40, Train: 2.682739522958559, Valid: 3.1677389511695275, Time=1288.5011739730835
+Epoch=41, Train: 2.629637268091005, Valid: 3.151941838631263, Time=1289.3766770362854
+Epoch=42, Train: 2.6154504240978333, Valid: 3.239859700202942, Time=1287.9575407505035
+Epoch=43, Train: 2.5987369543503203, Valid: 3.08535915521475, Time=1286.9628925323486
+Best epoch=43
+Epoch=44, Train: 2.6030366624158527, Valid: 3.1543762573829066, Time=1287.037192106247
+Epoch=45, Train: 2.600688685736959, Valid: 3.0924147404157196, Time=1287.3617856502533
+Epoch=46, Train: 2.5493552029605895, Valid: 2.9980807836239154, Time=1288.6494283676147
+Best epoch=46
+Epoch=47, Train: 2.5171031211576764, Valid: 3.163114677942716, Time=1287.3113861083984
+Epoch=48, Train: 2.511730740467707, Valid: 3.0279392627569344, Time=1288.7847819328308
+Epoch=49, Train: 2.5061780261614968, Valid: 3.0361906088315522, Time=1286.9256834983826
+Epoch=50, Train: 2.484358285627668, Valid: 3.0358048567405116, Time=1287.9936740398407
+Epoch=51, Train: 2.491426159465124, Valid: 3.08019084747021, Time=1287.643461227417
+Epoch=52, Train: 2.4632656039699676, Valid: 3.1293817079984225, Time=1288.4841578006744
+Epoch=53, Train: 2.4520027235386865, Valid: 3.336664260350741, Time=1287.567126274109
+Epoch=54, Train: 2.451337972094142, Valid: 3.1071786935512837, Time=1287.0235540866852
+Epoch=55, Train: 2.4516662803907243, Valid: 3.2656415994350727, Time=1288.3557348251343
+Epoch=56, Train: 2.439465088740228, Valid: 3.1077754790966328, Time=1287.439220905304
+Total time = 72602.2796497345
