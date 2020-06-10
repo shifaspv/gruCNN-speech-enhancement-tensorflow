@@ -44,13 +44,12 @@ Then, generate the lists of wave files ID for training and tessting using the ``
   </tr>
   <tr>
     <th>num_input_frames</th>
-      <td> Number of input/output frames being recurrently modelled for training</td>
+      <td> number of input/output frames being recurrently modelled for training</td>
   </tr>
     <tr>
     <th>filter_size_gruCNN</th>
     <td>size of gruCNN kernals </td>
   </tr>
-    </tr>
     <tr>
     <th>num_channel_gruCNN</th>
     <td>channels at each layer of gruCNN </td>
