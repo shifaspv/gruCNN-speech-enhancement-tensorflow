@@ -20,14 +20,13 @@
     "logging_dir"              : "logging",
     "model_ids"                : "model_ids.txt",
 
-    "num_lstm_layers"          : [1,2,3,4,5,6],          
-    "masker_length"            : 160,
+    "num_gruCNN_layers"        : [1,2,3,4,5,6],          
+    "fft_bin_size"             : 320,
     "num_input_frames"         : 128,
     "frame_size"               : 0.020,
     "frame_shift"              : 0.010,
-    "filter_size_conv_lstm"    : [3,3], 
-    "num_channel_lstm"         : 128,
-    "num_unit_fc"              : 256,
+    "filter_size_gruCNN"       : [3,3], 
+    "num_channel_gruCNN"       : 128,
     
     "use_biases"               : {"causal_layer":true, "bias":false, "bias_block":false, "TD_layer":false
                                  },
