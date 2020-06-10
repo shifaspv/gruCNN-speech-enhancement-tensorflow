@@ -55,7 +55,7 @@ Then, generate the lists of wave files ID for training and tessting using the ``
     <td>channels at each layer of gruCNN </td>
   </tr>
 <tr>
-    <th>Regarin</th>
+    <th>Regain</th>
       <td>The level to which wave files are RMS normalised </td>
   </tr>
 </table>
