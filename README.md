@@ -19,7 +19,7 @@ The model displayed on the paper was trained on the manually created data set wi
 
 Then, generate the lists of wave files ID for training and tessting using the ```./data/generate_wave_id_list.py```, and confirm that the names matches to the ones in ```./config/config_params.json```
 
-## Descriptions of the ```./config/config_params.json``` file variables
+## Description of the ```./config/config_params.json``` file variables
 <table>
   <tr>
     <th>"Name"</th>
