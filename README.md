@@ -75,12 +75,11 @@ Optionally, you can resume the training that could not have been completed, by p
 python train.py --model_id=saved_model_id
 ```
 
-Trained models are saved to the ```./saved_models``` directory
+Trained models will be saved to the ```./saved_models``` directory
 
 ## Testing the model
 
-You may either use the already trained model which is in the ```./saved_models```, or could have your own trained model.
-
+Once you have trained a model,
 Go to the ```./src``` folder, and compile the ```generate.sh``` file with first argument as the ```model_id```. 
 
 ```
