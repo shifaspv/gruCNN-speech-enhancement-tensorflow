@@ -1,6 +1,6 @@
 # gruCNN-SE: A fully recurrent feature extraction for speech enhancement
-This is a Tensorflow implementation of the ```SE-FFTNet``` architecture suggested in <a href="https://www.isca-speech.org/archive/Interspeech_2019/pdfs/2622.pdf"> this paper</a>, where the model has a wider dilation patter at the beginning which then decreases over the layers. 
-This new dilation pattern helps to learn bettern representations of the speech and noise characteristics, and have shown better quality enhancement over the SEGAN <a href="https://arxiv.org/abs/1703.09452">[1]</a> and SE-WaveNet <a href="https://arxiv.org/abs/1706.07162">[2]</a>, while faster to train and test.<br>
+This is a Tensorflow implementation of the ```gruCNN-SE``` architecture suggested in <a href="https://www.isca-speech.org/archive/Interspeech_2019/pdfs/2622.pdf"> this paper</a>, where we suggested a recurrent feature extraction approach to model speech recurrency at the feature extraction stage itself. 
+This is advantageous as the recurrency is being deemed in the extracted features, contrasting to the other models  <a href="https://www.microsoft.com/en-us/research/uploads/prod/2018/02/ZhaoZararTashevLee_ICASSP_2018.pdf">[1]</a> , where the recurrency being modelled independtly from the front-end feature extraction. and have shown better quality enhancement over the SEGANand SE-WaveNet <a href="https://arxiv.org/abs/1706.07162">[2]</a>, while faster to train and test.<br>
 
 Few samples from the trained model are displayed <a href="https://www.csd.uoc.gr/~shifaspv/IS2019-demo">here</a>, along with the other models.
 
