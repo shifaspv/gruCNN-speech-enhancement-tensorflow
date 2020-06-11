@@ -1,6 +1,5 @@
-# A Wavenet For Speech Denoising - Dario Rethage - 19.05.2017
 # Util.py
-# Utility functions for dealing with audio signals and training a Denoising Wavenet
+# Utility functions for dealing with audio signals and training 
 import os
 import numpy as np
 import json
