@@ -1,6 +1,7 @@
 from __future__ import print_function
 
-__author__ = """Muahammed PV Shifas (shifaspv@csd.uoc.gr)"""
+__author__ = """Vassilis Tsiaras (tsiaras@csd.uoc.gr)"""
+#    Vassilis Tsiaras <tsiaras@csd.uoc.gr>
 #    Computer Science Department, University of Crete.
 
 import os

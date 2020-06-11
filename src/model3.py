@@ -53,23 +53,21 @@ def get_getter(ema):
 
 
 
-class RNN_SE(object):
+class gruCNN_SE(object):
     
     def __init__(self,cfg,model_id=None):
         self.cfg=cfg        
-        self.num_unit_fc = cfg['num_unit_fc'] 
-#        self.network_depth=cfg['network_depth']
         self.use_biases = cfg['use_biases']
         self.l2 = cfg['L2_regularization'] 
         self.use_dropout = cfg['use_dropout']
         self.use_ema = cfg['use_ema']
         self.polyak_decay = cfg['polyak_decay']
-        self.num_lstm_layers=cfg['num_lstm_layers']
+        self.num_gru_layers=cfg['num_gruCNN_layers']
         self.model_id = model_id    
-        self.masker_length= cfg['masker_length']
-        self.filter_size_conv_lstm=cfg[ 'filter_size_conv_lstm']
+        self.masker_length= cfg['fft_bin_size']/2
+        self.filter_size_gruCNN=cfg[ 'filter_size_gruCNN']
         self.num_input_frames=cfg['num_input_frames']
-        self.num_channel_lstm=cfg['num_channel_lstm']
+        self.num_channel_gruCNN=cfg['num_channel_gruCNN']
         self.batch_size=cfg['batch_size']
         self.frame_size=int(cfg['frame_size']*cfg['sample_rate'])
         self.frame_shift=int(cfg['frame_shift']*cfg['sample_rate'])
@@ -81,40 +79,39 @@ class RNN_SE(object):
     
         
     def create_variables(self):       
-        fc_unit = self.num_unit_fc
-        fw_lstm=self.filter_size_conv_lstm
+        fw_gru=self.filter_size_gruCNN
         DFm=int((self.masker_length/4+1))
-        r_lstm=self.num_channel_lstm
+        r_gru=self.num_channel_gruCNN
         dim_out = self.masker_length+1
-        with tf.variable_scope('RNN_SE'):
+        with tf.variable_scope('gruCNN_SE'):
                       
                 
-            with tf.variable_scope('ConvLSTM_layer'):  
-                for i, feature_dim in enumerate(self.num_lstm_layers):   
+            with tf.variable_scope('gruCNN_layer'):  
+                for i, feature_dim in enumerate(self.num_gru_layers):   
                     with tf.variable_scope('block{}'.format(i)):
 #            with tf.variable_scope('Conv_LSTM_layer'): # implementing LSTM manually
                         if i==0:
-                            get_weight_variable('W_zx',( fw_lstm[0], fw_lstm[1], 1, r_lstm))
-                            get_weight_variable('W_zh',( fw_lstm[0], fw_lstm[1], r_lstm, r_lstm))
-                            get_weight_variable('W_rx',(fw_lstm[0], fw_lstm[1], 1, r_lstm))
-                            get_weight_variable('W_rh',(fw_lstm[0], fw_lstm[1], r_lstm, r_lstm))
-                            get_weight_variable('W_hx',(fw_lstm[0],fw_lstm[1], 1, r_lstm))
-                            get_weight_variable('W_hh',(fw_lstm[0], fw_lstm[1], r_lstm, r_lstm)) 
+                            get_weight_variable('W_zx',( fw_gru[0], fw_gru[1], 1, r_gru))
+                            get_weight_variable('W_zh',( fw_gru[0], fw_gru[1], r_gru, r_gru))
+                            get_weight_variable('W_rx',(fw_gru[0], fw_gru[1], 1, r_gru))
+                            get_weight_variable('W_rh',(fw_gru[0], fw_gru[1], r_gru, r_gru))
+                            get_weight_variable('W_hx',(fw_gru[0],fw_gru[1], 1, r_gru))
+                            get_weight_variable('W_hh',(fw_gru[0], fw_gru[1], r_gru, r_gru)) 
     #                        get_weight_variable('TD_W', (DFm*r_lstm,dim_out))  
                         else:
-                            get_weight_variable('W_zx',( fw_lstm[0],fw_lstm[1], r_lstm, r_lstm))
-                            get_weight_variable('W_zh',( fw_lstm[0], fw_lstm[1], r_lstm, r_lstm))
-                            get_weight_variable('W_rx',(fw_lstm[0], fw_lstm[1], r_lstm, r_lstm))
-                            get_weight_variable('W_rh',(fw_lstm[0], fw_lstm[1], r_lstm, r_lstm))
-                            get_weight_variable('W_hx',(fw_lstm[0], fw_lstm[1], r_lstm, r_lstm))
-                            get_weight_variable('W_hh',(fw_lstm[0], fw_lstm[1], r_lstm, r_lstm))    
-                        get_weight_variable('alpha',(r_lstm))                          
+                            get_weight_variable('W_zx',( fw_gru[0],fw_gru[1], r_gru, r_gru))
+                            get_weight_variable('W_zh',( fw_gru[0], fw_gru[1], r_gru, r_gru))
+                            get_weight_variable('W_rx',(fw_gru[0], fw_gru[1], r_gru, r_gru))
+                            get_weight_variable('W_rh',(fw_gru[0], fw_gru[1], r_gru, r_gru))
+                            get_weight_variable('W_hx',(fw_gru[0], fw_gru[1], r_gru, r_gru))
+                            get_weight_variable('W_hh',(fw_gru[0], fw_gru[1], r_gru, r_gru))    
+                        get_weight_variable('alpha',(r_gru))                          
                           
                 
             with tf.name_scope('TD_layer'):
                 # final Fully connected layer
-                get_weight_variable('TD_W1', (DFm*r_lstm,fc_unit))
-                get_weight_variable('TD_W2', (DFm*r_lstm,dim_out))
+#                get_weight_variable('TD_W1', (DFm*r_lstm,fc_unit))
+                get_weight_variable('TD_W2', (DFm*r_gru,dim_out))
                 if self.use_biases['TD_layer']:
                     get_bias_variable('TD', (dim_out))                           
 
@@ -130,87 +127,74 @@ class RNN_SE(object):
       
     def TimeDistributed(self, X, ema=None):
 #        pdb.set_trace()    
-        # post processing is a Fully connected network (FC)
-        # Fully Connected Layer
         DFm=X.shape[1].value
-#        fc_unit = self.num_unit_fc
-
-#        DFm=int((self.masker_length/2+1))
-        r_lstm=self.num_channel_lstm
+        r_gru=self.num_channel_gruCNN
         dim_out = self.masker_length+1
         X_ticks=tf.unstack(X,axis=2)
         out=[]
         with tf.name_scope('TD_layer'):
             for X_t in X_ticks:
                 X_t=tf.reshape(X_t,(self.batch_size,-1))
-#                TD_W1=get_weight_variable('TD_W1', (DFm*r_lstm,fc_unit))
-#                out_t1=tf.matmul(X_t,TD_W1)
-#                out_t1=tf.nn.relu(out_t1)
-                TD_W2=get_weight_variable('TD_W2', (DFm*r_lstm,dim_out))
+                TD_W2=get_weight_variable('TD_W2', (DFm*r_gru,dim_out))
                 out_t2=tf.matmul(X_t,TD_W2)
                 out_t2=tf.nn.relu(out_t2)
                 out.append(out_t2)
         out=tf.transpose(tf.stack(out),(1,2,0)) 
-        
-#        pdb.set_trace()
         return out
       
         
-    def ConvLSTM_manual(self,X,h_t0,index):
+    def gruCNN_manual(self,X,h_t0,index):
 #        pdb.set_trace()
 
-        fw=self.filter_size_conv_lstm
-        r_lstm = self.num_channel_lstm
+        fw=self.filter_size_gruCNN
+        r_gru = self.num_channel_gruCNN
         if index==0:
             r=1
         else:
-            r=r_lstm
+            r=r_gru
         with tf.variable_scope('block{}'.format(index)):
             # z_t implement
 #            pdb.set_trace()
-            W_zx=get_weight_variable('W_zx',(fw[0],fw[1], r, r_lstm))
-            W_zh=get_weight_variable('W_zh',(fw[0], fw[1], r_lstm, r_lstm))
+            W_zx=get_weight_variable('W_zx',(fw[0],fw[1], r, r_gru))
+            W_zh=get_weight_variable('W_zh',(fw[0], fw[1], r_gru, r_gru))
             z_t=conv(X,W_zx)+conv(h_t0,W_zh)
             z_t=tf.sigmoid(z_t)
             
             # r_t implement
-            W_rx=get_weight_variable('W_rx',(fw[0], fw[1], r, r_lstm))
-            W_rh=get_weight_variable('W_rh',(fw[0], fw[1], r_lstm, r_lstm))
+            W_rx=get_weight_variable('W_rx',(fw[0], fw[1], r, r_gru))
+            W_rh=get_weight_variable('W_rh',(fw[0], fw[1], r_gru, r_gru))
             r_t=conv(X,W_rx)+conv(h_t0,W_rh)
             r_t=tf.sigmoid(r_t)
             
             # h_t_hat implementation
-            W_hx=get_weight_variable('W_hx',(fw[0], fw[1], r, r_lstm))
-            W_hh=get_weight_variable('W_hh',(fw[0], fw[1], r_lstm, r_lstm))
+            W_hx=get_weight_variable('W_hx',(fw[0], fw[1], r, r_gru))
+            W_hh=get_weight_variable('W_hh',(fw[0], fw[1], r_gru, r_gru))
             r_t_h_t=tf.multiply(r_t,h_t0)
             h_t_hat=conv(X,W_hx)+conv(r_t_h_t,W_hh)
             h_t_hat=tf.tanh(h_t_hat)
             
             
             h_t=tf.multiply(z_t,h_t0)+tf.multiply((1-z_t),h_t_hat)
-            o_t=self.parametric_relu(h_t,r_lstm) ## Should move this out of loop        
+            o_t=self.parametric_relu(h_t,r_gru)        
 
     #        h_t=tf.layers.dropout(h_t,rate=0.2)
         return o_t,o_t
     
-    def ConvLSTM_layer(self, layer_input,index,is_training=True,ema=None):
-        r_lstm=self.num_channel_lstm
-        fw=self.filter_size_conv_lstm
+    def gruCNN_layer(self, layer_input,index,is_training=True,ema=None):
+        r_gru=self.num_channel_gruCNN
+        fw=self.filter_size_gruCNN
         DFm=layer_input.shape[1].value
-#        DFm=int((self.masker_length+1))
-#        X=tf.transpose(layer_input,[2,0,1,3])
         padding=tf.constant([[0,0],[0,0],[1,1],[0,0]])
         X=tf.pad(layer_input,padding, mode="CONSTANT")
 #        pdb.set_trace()
-        # Conv_LSTM manual implementation
-#        inputs=tf.unstack(X)
-        h_t0=tf.zeros(shape=(self.batch_size,DFm,fw[1],r_lstm))
+        # gruCNN manual implementation
+        h_t0=tf.zeros(shape=(self.batch_size,DFm,fw[1],r_gru))
         rnn_outputs=[]
-        with tf.variable_scope('ConvLSTM_layer',reuse=True):
+        with tf.variable_scope('gruCNN_layer',reuse=True):
             for i in range(layer_input.shape[2].value):
                 input=tf.slice(X,[0,0,i,0],[-1,-1,fw[1],-1])
 #                pdb.set_trace()
-                o_t, h_t0= self.ConvLSTM_manual(input,h_t0,index)
+                o_t, h_t0= self.gruCNN_manual(input,h_t0,index)
 
                 rnn_outputs.append(o_t[:,:,1,:])
         #        pdb.set_trace()    
@@ -238,23 +222,13 @@ class RNN_SE(object):
     
     def inference(self, X, is_training, ema): 
         # Input X is mixed signal (clean_speech + noise) 
-        with tf.variable_scope('RNN_SE', reuse=True):
-            #X ->Causal_layer -> FFT_layer0-> ... FFT_layerN 
+        with tf.variable_scope('gruCNN_SE', reuse=True):
+            #X -> gruCNN_layer0-> ... gruCNN_layerN 
 
-            # Conv Layers  
-
-#            for i, dilation in enumerate(self.num_conv_layers):         
-#                X= self.Conv_layer(X, i, is_training, ema)
-            # post processing
-
-#            X=tf.nn.max_pool(X,ksize=(1,2,1,1),strides=(1,2,1,1),padding='SAME')
-            #ConvLSTM layers
-            for i, dilation in enumerate(self.num_lstm_layers):         
-                X= self.ConvLSTM_layer(X, i, is_training, ema)
+            for i, dilation in enumerate(self.num_gru_layers):         
+                X= self.gruCNN_layer(X, i, is_training, ema)
                 if ((i==1) or (i==3)):
                     X=tf.nn.max_pool(X,ksize=[1,2,1,1],strides=[1,2,1,1],padding='SAME')
-
-#                pdb.set_trace()
             # Time Distributed layer
             clean_mask_pred= self.TimeDistributed(X, ema)
 #            pdb.set_trace()

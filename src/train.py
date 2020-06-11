@@ -7,15 +7,12 @@ University of Crete (UoC)
 """
 import os
 import logging
-import numpy as np
 import tensorflow as tf
-from model3 import RNN_SE
+from model3 import gruCNN_SE
 from lib.model_io import restore_variables
 from lib.optimizers import get_learning_rate,get_optimizer
 from lib.audio_conditions_io import AudioConditionsReader
 from lib.model_io import get_configuration, setup_logger, get_model_id
-from lib.util import compute_receptive_field_length
-import pdb
 cfg, learning_rate_params, optim_params, gc = get_configuration('train')
 os.environ["CUDA_VISIBLE_DEVICES"] = cfg["CUDA_VISIBLE_DEVICES"]
 
@@ -40,14 +37,14 @@ with tf.name_scope('create_readers'):
     train_noisy_audio_dir = os.path.join(cfg['data_dir'], cfg['train_noisy_audio_dir'])
     train_audio_reader = AudioConditionsReader(coord, train_file_list, train_clean_audio_dir, train_noisy_audio_dir, cfg['audio_ext'], cfg['sample_rate'],
                                     cfg['regain'], batch_size=cfg['batch_size'], num_input_frames=cfg['num_input_frames'], frame_size=cfg['frame_size'],frame_shift=cfg['frame_shift'],
-                                    masker_length=cfg['masker_length'], queue_size=cfg['queue_size'], permute_segments=cfg['permute_segments'])
+                                    masker_length=cfg['fft_bin_size']/2, queue_size=cfg['queue_size'], permute_segments=cfg['permute_segments'])
 
     valid_file_list = os.path.join(cfg['data_dir'], cfg['valid_file_list']) 
     valid_clean_audio_dir = os.path.join(cfg['data_dir'], cfg['valid_clean_audio_dir'])
     valid_noisy_audio_dir = os.path.join(cfg['data_dir'], cfg['valid_noisy_audio_dir']) 
     valid_audio_reader = AudioConditionsReader(coord, valid_file_list, valid_clean_audio_dir, valid_noisy_audio_dir, cfg['audio_ext'], cfg['sample_rate'], 
                                                cfg['regain'], batch_size=cfg['batch_size'], num_input_frames=cfg['num_input_frames'], frame_size=cfg['frame_size'],frame_shift=cfg['frame_shift'],
-                                               masker_length=cfg['masker_length'],queue_size=cfg['queue_size'], permute_segments=cfg['permute_segments'])
+                                               masker_length=cfg['fft_bin_size']/2,queue_size=cfg['queue_size'], permute_segments=cfg['permute_segments'])
 
 # define learning rate decay method 
 global_step = tf.Variable(0, trainable=False, name='global_step')
@@ -58,7 +55,7 @@ optimizer = get_optimizer(opt_name, learning_rate, optim_params)
 
 
 # Create the network
-RNN_model = RNN_SE(cfg, model_id)
+RNN_model = gruCNN_SE(cfg, model_id)
 # Define the train computation graph
 #pdb.set_trace()
 RNN_model.define_train_computations(optimizer, train_audio_reader, valid_audio_reader, global_step)
