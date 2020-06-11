@@ -319,7 +319,7 @@ class gruCNN_SE(object):
 #            plt.title('target image')
 #            ax.invert_yaxis()
 #            plt.show()
-            print( 'average_training_loss is %s' %(batch_loss))
+            print( 'Batch loss is %s' %(batch_loss))
         coord.join([thread])
         
         if total_batches > 0:  
