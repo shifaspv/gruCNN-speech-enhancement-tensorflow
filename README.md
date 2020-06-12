@@ -15,7 +15,7 @@ Tensorflow - 1.14.0 <br>
 
 We required few more very common Python packages, check the ```required.txt``` file and install if you don't have.
 ## Data set
-The model displayed on the paper was trained on the manually created data set with clean speech from <a href="https://datashare.is.ed.ac.uk/handle/10283/1942">here</a>. You may download the clean and noisy speech from there, and extract them to ```./data/NSDTSEA``` directory. 
+The model displayed on the paper was trained on a manually created data set with clean speech from <a href="https://datashare.is.ed.ac.uk/handle/10283/1942">here</a>. You may download the clean and noisy speech from there, and extract them to ```./data/NSDTSEA``` directory. 
 
 Then, generate the lists of wave files ID for training and tessting using the ```./data/generate_wave_id_list.py```, and confirm that the names match to the ones in ```./config/config_params.json```
 
