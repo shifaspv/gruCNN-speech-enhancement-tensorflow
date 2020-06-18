@@ -75,7 +75,7 @@ Optionally, you can resume the training that could not have been completed, by p
 python train.py --model_id=saved_model_id
 ```
 
-Trained models will be saved to the ```./saved_models``` directory
+You may please reduce the ```batch size``` if face memory issue while training. Trained models will be saved to the ```./saved_models``` directory
 
 ## Testing the model
 
