@@ -359,7 +359,7 @@ class gruCNN_SE(object):
         logger = logging.getLogger("msg_logger") 
 
         started_datestring = "{0:%Y-%m-%d, %H-%M-%S}".format(datetime.now())
-        logger.info('Training of FFTNet started at: ' + started_datestring + ' using Tensorflow.\n')
+        logger.info('Training of gruCNN-SE started at: ' + started_datestring + ' using Tensorflow.\n')
         logger.info(get_info(cfg))
 
 #        if self.use_batch_normalization and self.use_biases['filter_gate']:
