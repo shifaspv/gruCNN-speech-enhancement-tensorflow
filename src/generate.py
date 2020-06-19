@@ -7,7 +7,7 @@ __author__ = """Vassilis Tsiaras (tsiaras@csd.uoc.gr)"""
 import os
 import logging
 import tensorflow as tf
-from model3 import RNN_SE
+from model3 import gruCNN_SE
 from lib.optimizers import get_learning_rate, get_optimizer
 from lib.audio_conditions_io import AudioConditionsReader, load_noisy_audio_label_and_speaker_id
 from lib.model_io import get_configuration, setup_logger
@@ -24,9 +24,9 @@ coord = tf.train.Coordinator()
 sess = tf.Session()
 
 # Create the network
-RNN_LSTM = RNN_SE(cfg)
+gruCNN_SE = gruCNN_SE(cfg)
 
-RNN_LSTM.define_generation_computations()
+gruCNN_SE.define_generation_computations()
 
 init_op = tf.global_variables_initializer()
 sess.run(init_op)
@@ -39,7 +39,7 @@ noisy_audio= load_noisy_audio_label_and_speaker_id(cfg['noisy_speech_filename'],
                                                             cfg['sample_rate'])
 
 #pdb.set_trace()
-clean_audio, noise = RNN_LSTM.generation(sess, noisy_audio)   
+clean_audio, noise = gruCNN_SE.generation(sess, noisy_audio)   
 
 wav_out_path = os.path.join(cfg['base_dir'], cfg['output_dir'], str(cfg['model_id']))
 if not os.path.exists(wav_out_path):
