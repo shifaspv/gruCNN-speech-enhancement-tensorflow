@@ -12,7 +12,7 @@ __author__ = """Vassilis Tsiaras (tsiaras@csd.uoc.gr)"""
 #    Computer Science Department, University of Crete.
 
 def get_configuration(learning_phase):
-    parser = argparse.ArgumentParser(description='FFTNet argument parser')
+    parser = argparse.ArgumentParser(description='gruCNN argument parser')
     parser.add_argument('--config', type=str, default='config_params.json', help='The configuration filename')
     parser.add_argument('--model_id', type=int, default=None, help='The model id. It is used to recover a saved model')
     if learning_phase == 'generation':     
@@ -104,7 +104,7 @@ def save_variables(sess, saver, epoch, cfg, model_id):
     model_path = os.path.join(cfg['base_dir'], cfg['saved_models_dir'], str(model_id)) 
     if not os.path.exists(model_path):
         os.makedirs(model_path)
-    checkpoint_path = os.path.join(model_path, 'FFTNet')
+    checkpoint_path = os.path.join(model_path, 'gruCNN')
     saver.save(sess, checkpoint_path, global_step=epoch)
 
 def restore_variables(sess, cfg):
